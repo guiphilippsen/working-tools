@@ -80,7 +80,7 @@ def t_commun():
 
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.bind(('192.168.100.201', 4444))
+sock.bind(('', )) #Host Config | Sintax <HOST_IP>, <HOST_PORT>
 print(colored('[-]Waiting for connections...', 'red'))
 sock.listen(5)
 
